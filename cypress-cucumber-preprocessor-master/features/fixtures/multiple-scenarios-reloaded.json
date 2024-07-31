@@ -1,0 +1,71 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "a-feature;a-scenario",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "a scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "a step",
+            "match": {
+              "location": "not available:0"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 0
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@env(origin=\"https://duckduckgo.com/\")",
+            "line": 2
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "a-feature;another-scenario",
+        "keyword": "Scenario",
+        "line": 7,
+        "name": "another scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "another step",
+            "match": {
+              "location": "not available:0"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 0
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@env(origin=\"https://google.com/\")",
+            "line": 6
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "a-feature",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "a feature",
+    "tags": [],
+    "uri": "cypress/e2e/a.feature"
+  }
+]

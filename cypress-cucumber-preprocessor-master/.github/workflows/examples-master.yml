@@ -1,0 +1,64 @@
+name: Examples (master)
+
+on:
+  push:
+    branches:
+      - master
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  find-examples:
+    runs-on: ubuntu-20.04
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - id: set-matrix
+        name: Prepare
+        run: echo "matrix=$(node -p "JSON.stringify(fs.readdirSync('examples').filter(f => f !== 'readme.md'))")" >> $GITHUB_OUTPUT
+      - run: npm -v
+
+  example:
+    needs: find-examples
+    runs-on: ubuntu-20.04
+    container:
+      image: cypress/base:20.5.0
+    strategy:
+      matrix:
+        example: ${{fromJson(needs.find-examples.outputs.matrix)}}
+    env:
+      NPM_CONFIG_PACKAGE_LOCK: "false"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache NPM modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm@${{ matrix.example }}
+      - name: Cache Cypress binaries
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-examples
+      # In lack of native support, https://github.com/actions/checkout/issues/172.
+      - name: Make checkout sparse
+        run: |
+          shopt -s extglob
+          rm -rf examples/!(${{ matrix.example }})
+          rm -rf !(examples)
+      - name: Install NPM modules
+        working-directory: examples/${{ matrix.example }}
+        run: npm install
+      - name: Run Cypress
+        working-directory: examples/${{ matrix.example }}
+        run: |
+          if [[ "${{ matrix.example }}" == ct-* ]]; then
+            npx cypress run --component
+          else
+            npx cypress run --e2e
+          fi

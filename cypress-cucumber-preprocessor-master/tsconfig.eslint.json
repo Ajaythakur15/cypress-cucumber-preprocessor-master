@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "features/**/*.ts",
+    "lib/**/*.ts",
+    "test/**/*.ts",
+    "test-d/**/*.ts",
+  ],
+  "exclude": []
+}

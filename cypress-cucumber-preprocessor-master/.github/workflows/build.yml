@@ -1,0 +1,82 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  prepare-versions:
+    runs-on: ubuntu-20.04
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - id: set-matrix
+        name: Prepare
+        run: echo "matrix=$(node -p "JSON.stringify(require('./package.json').peerDependencies['cypress'].split(' || '))")" >> $GITHUB_OUTPUT
+      - run: npm -v
+
+  test:
+    needs: prepare-versions
+    runs-on: ubuntu-20.04
+    container:
+      image: cypress/browsers:node-20.5.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+    strategy:
+      matrix:
+        cypress-version: ${{fromJson(needs.prepare-versions.outputs.matrix)}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache NPM modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-linux@${{ matrix.cypress-version }}
+      - name: Cache Cypress binaries
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-linux@${{ matrix.cypress-version }}
+      - name: Change owner
+        run: "chown root: ."
+      - name: Dependencies
+        env:
+          CYPRESS_INSTALL_BINARY: "0"
+        run: |
+          npm install --force && \
+          npm install --no-save cypress@${{ matrix.cypress-version }} && \
+          env -u CYPRESS_INSTALL_BINARY npx cypress install
+      - name: Build
+        run: npm run build
+      - name: Test
+        run: npm run test
+      - name: Version
+        run: npx cypress --version
+
+  windows:
+    runs-on: windows-latest
+    env:
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm
+      CYPRESS_CACHE_FOLDER: ${{ github.workspace }}/.cypress
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache NPM modules
+        uses: actions/cache@v4
+        with:
+          path: .npm
+          key: npm-windows
+      - name: Cache Cypress binaries
+        uses: actions/cache@v4
+        with:
+          path: .cypress
+          key: cypress-windows
+      - name: Dependencies
+        shell: bash
+        run: npm install
+      - name: Build
+        run: npm run build
+      # https://github.com/webpack/webpack/issues/12759
+      - name: Remove Webpack test
+        run: rm features/loaders/webpack.feature
+      - name: Test
+        run: npm run test:integration

@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node", "mocha", "cypress"],
+  },
+  "include": [
+    "*.test-d.ts",
+    "../augmentations.d.ts",
+    "../declarations.d.ts",
+  ]
+}

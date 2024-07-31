@@ -1,0 +1,25 @@
+{
+  "ts-node": {
+    "files": true
+  },
+  "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "target": "ES2017",
+    "module": "nodenext",
+    "types": ["node", "cypress"],
+    "lib": ["dom", "ESNext"]
+  },
+  "include": [
+    "lib/**/*.ts",
+    "augmentations.d.ts",
+    "declarations.d.ts"
+  ],
+  "exclude": [
+    "lib/**/*.test.ts"
+  ]
+}

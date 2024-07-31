@@ -1,0 +1,37 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "a-feature;foo",
+        "keyword": "Scenario Outline",
+        "line": 7,
+        "name": "foo",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 3,
+            "name": "a step",
+            "match": {
+              "location": "not available:0"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 0
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "a-feature",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "a feature",
+    "tags": [],
+    "uri": "cypress/e2e/a.feature"
+  }
+]

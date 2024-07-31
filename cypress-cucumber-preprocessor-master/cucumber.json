@@ -1,0 +1,10 @@
+{
+  "default": {
+    "format": ["@cucumber/pretty-formatter"],
+    "formatOptions": {
+      "colorsEnabled": true
+    },
+    "requireModule": ["ts-node/register"],
+    "require": ["features/**/*.ts"]
+  }
+}

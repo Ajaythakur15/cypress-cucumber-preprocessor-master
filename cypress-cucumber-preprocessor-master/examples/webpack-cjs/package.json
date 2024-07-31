@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "latest",
+    "@cypress/webpack-preprocessor": "latest",
+    "cypress": "latest",
+    "webpack": "latest"
+  }
+}
